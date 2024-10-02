@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Environmental Monitoring Dashboard - Table</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+      }
+
+      .button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Environmental Monitoring Dashboard - Table</h1>
+    <div>
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>Water Flow (WF)</th>
+            <th>Sulfuric Acid (Sulp)</th>
+            <th>Limestone (Lime)</th>
+            <th>pH</th>
+            <th>Time</th>
+            <th>Dissolved Oxygen (DO)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="buttons">
+      <a href="M1.html" class="button">Back</a>
+      <a href="LineChartA.html" class="button">View Line Charts</a>
+      <a href="BarChartA.html" class="button">View Bar Charts</a>
+    </div>
+
+    <script>
+      const apiUrl =
+        "https://3l4vv4ror2.execute-api.us-east-1.amazonaws.com/MineA-stage01";
+
+      async function fetchData() {
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          populateTable(data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+
+      function populateTable(data) {
+        const tableBody = document.querySelector("#data-table tbody");
+        tableBody.innerHTML = "";
+
+        data.forEach((record) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${record.WF}</td>
+                    <td>${record.Sulp}</td>
+                    <td>${record.Lime}</td>
+                    <td>${record["pH "]}</td>
+                    <td>${record.Time}</td>
+                    <td>${record.DO}</td>
+                    
+                `;
+          tableBody.appendChild(row);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", fetchData);
+    </script>
+  </body>
+</html>

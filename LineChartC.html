@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Environmental Monitoring Dashboard - Line Charts</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .charts {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      canvas {
+        max-width: 100%;
+      }
+
+      .back-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+      }
+
+      .back-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <h1>Environmental Monitoring Dashboard - Line Charts</h1>
+    <div class="charts">
+      <canvas id="flowChart"></canvas>
+      <canvas id="sulfuricChart"></canvas>
+      <canvas id="limestoneChart"></canvas>
+      <canvas id="phChart"></canvas>
+      <canvas id="doChart"></canvas>
+    </div>
+
+    <a href="DataC.html" class="back-button">Go Back to Table</a>
+
+    <script>
+      const apiUrl =
+        "https://j4i6y919y8.execute-api.us-east-1.amazonaws.com/MineC-stage01";
+
+      async function fetchData() {
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          createLineCharts(data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+
+      function createLineCharts(data) {
+        const labels = data.map((record) => record.Time);
+
+        new Chart(document.getElementById("flowChart").getContext("2d"), {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Water Flow (WF)",
+                data: data.map((record) => record.WF),
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 2,
+                fill: false,
+              },
+            ],
+          },
+        });
+
+        new Chart(document.getElementById("sulfuricChart").getContext("2d"), {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Sulfuric Acid (Sulp)",
+                data: data.map((record) => record.Sulp),
+                borderColor: "rgba(255, 159, 64, 1)",
+                borderWidth: 2,
+                fill: false,
+              },
+            ],
+          },
+        });
+
+        new Chart(document.getElementById("limestoneChart").getContext("2d"), {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Limestone (Lime)",
+                data: data.map((record) => record.Lime),
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 2,
+                fill: false,
+              },
+            ],
+          },
+        });
+
+        new Chart(document.getElementById("phChart").getContext("2d"), {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "pH Level",
+                data: data.map((record) => record["pH "]),
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 2,
+                fill: false,
+              },
+            ],
+          },
+        });
+
+        new Chart(document.getElementById("doChart").getContext("2d"), {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Dissolved Oxygen (DO)",
+                data: data.map((record) => record.DO),
+                borderColor: "rgba(153, 102, 255, 1)",
+                borderWidth: 2,
+                fill: false,
+              },
+            ],
+          },
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", fetchData);
+    </script>
+  </body>
+</html>

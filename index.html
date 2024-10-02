@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mine Selection - Aqua Sentinel</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      header {
+        background-color: #4caf50;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 24px;
+      }
+
+      .container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 30px;
+        font-size: 32px;
+      }
+
+      .mine-button {
+        display: inline-block;
+        background-color: #4caf50;
+        color: white;
+        padding: 15px 30px;
+        margin: 10px;
+        font-size: 18px;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .mine-button:hover {
+        background-color: #45a049;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 14px;
+      }
+      img {
+        height: 5rem;
+        width: 5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header with product name -->
+    <header>Aqua Sentinel - Environmental Monitoring</header>
+
+    <!-- Main content: Mine Selection -->
+    <div class="container">
+      <div>
+        <img src="./mining-industry.png" alt="mining-industry" />
+        <h1>Monitor a Mine Site</h1>
+        <a href="M1.html" class="mine-button">Eastern Mine</a>
+        <a href="M2.html" class="mine-button">Central Mine</a>
+        <a href="M3.html" class="mine-button">Western Mine</a>
+      </div>
+    </div>
+
+    <!-- Footer with additional information -->
+    <footer>
+      &copy; 2024 Aqua Sentinel | Designed for mine water quality monitoring
+    </footer>
+  </body>
+</html>

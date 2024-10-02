@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mine Care Neutralizer Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+
+      header {
+        background-color: #005f73;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+      }
+
+      .summary {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px auto;
+        max-width: 1200px;
+      }
+
+      .card {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 22%;
+      }
+
+      .card h2 {
+        margin-bottom: 10px;
+      }
+
+      .card p {
+        font-size: 24px;
+        font-weight: bold;
+        color: #005f73;
+      }
+
+      .details {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .details h2 {
+        margin-bottom: 20px;
+        color: #005f73;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      table th,
+      table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      table th {
+        background-color: #f0f0f0;
+      }
+
+      footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #005f73;
+        color: white;
+        margin-top: 40px;
+      }
+
+      .btn-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        background-color: #005f73;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 10px; /* Adjust margin for spacing between buttons */
+      }
+
+      .back-button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        margin: 0 10px; /* Adjust margin for spacing between buttons */
+      }
+
+      .back-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Aqua Sentinel</h1>
+    </header>
+
+    <section class="summary">
+      <div class="card">
+        <h2>Neutralization Status</h2>
+        <p id="neutralization-status">In Progress</p>
+      </div>
+      <div class="card">
+        <h2>Total Contaminated Water</h2>
+        <p id="contaminated-volume">1000 KL</p>
+      </div>
+      <div class="card">
+        <h2>Water Neutralized</h2>
+        <p id="neutralized-volume">In Progress</p>
+      </div>
+      <div class="card">
+        <h2>Current pH Level</h2>
+        <p id="ph-level">7.5</p>
+      </div>
+    </section>
+
+    <section class="details">
+      <h2>Water Quality Metrics</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Water Flow (WF)</td>
+            <td id="wf-value">500 L/min</td>
+            <td id="wf-status">Normal</td>
+          </tr>
+          <tr>
+            <td>Sulfuric Acid (Sulp)</td>
+            <td id="sulfuric-value">2.3 g/L</td>
+            <td id="sulfuric-status">High</td>
+          </tr>
+          <tr>
+            <td>Limestone (Lime)</td>
+            <td id="limestone-value">5.4 g/L</td>
+            <td id="limestone-status">Sufficient</td>
+          </tr>
+          <tr>
+            <td>pH Level</td>
+            <td id="ph-value">7.2</td>
+            <td id="ph-status">Safe</td>
+          </tr>
+          <tr>
+            <td>Time</td>
+            <td id="time-value">2024-09-30T12:34:56</td>
+            <td>-</td>
+          </tr>
+          <tr>
+            <td>Dissolved Oxygen (DO)</td>
+            <td id="oxygen-value">6.8 mg/L</td>
+            <td id="oxygen-status">Normal</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="btn-container">
+      <a href="index.html" class="back-button">Go Back to Mine Selection</a>
+      <a href="DataA.html" class="back-button">Historical Data</a>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Aqua Sentinel | Powered by Phoenix</p>
+    </footer>
+
+    <script>
+      const apiUrl =
+        "https://3l4vv4ror2.execute-api.us-east-1.amazonaws.com/MineA-stage01"; // Replace with your API Gateway URL
+
+      let currentIndex = 0;
+      let fetchedData = [];
+
+      // Function to fetch and update data
+      function fetchDataAndUpdateDashboard() {
+        if (fetchedData.length === 0) {
+          fetch(apiUrl)
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data); // Log the fetched data to inspect structure
+              fetchedData = data;
+              updateDashboard(fetchedData[currentIndex]);
+            })
+            .catch((error) => console.error("Error fetching data:", error));
+        } else {
+          currentIndex = (currentIndex + 1) % fetchedData.length;
+          updateDashboard(fetchedData[currentIndex]);
+        }
+      }
+
+      // Call fetchDataAndUpdateDashboard function every 3 seconds
+      setInterval(fetchDataAndUpdateDashboard, 3000);
+
+      function updateDashboard(data) {
+        console.log("Updating dashboard with data:", data);
+
+        // Update dashboard cards
+        document.getElementById("neutralization-status").textContent =
+          "In Progress";
+        document.getElementById("contaminated-volume").textContent = "1000 KL";
+        document.getElementById("neutralized-volume").textContent =
+          "In Progress";
+        document.getElementById("ph-level").textContent = data["pH "] || "7.5";
+
+        // Update table fields based on fetched data
+        document.getElementById("wf-value").textContent =
+          (data["WF"] || "N/A") + " L/min";
+        document.getElementById("sulfuric-value").textContent =
+          (data["Sulp"] || "N/A") + " g/L";
+        document.getElementById("limestone-value").textContent =
+          (data["Lime"] || "N/A") + " g/L";
+        document.getElementById("ph-value").textContent = data["pH "] || "N/A";
+        document.getElementById("time-value").textContent =
+          data["Time"] || "N/A";
+        document.getElementById("oxygen-value").textContent =
+          (data["DO"] || "N/A") + " mg/L";
+
+        // Add status conditions
+        document.getElementById("wf-status").textContent =
+          data["WF"] > 400 ? "Normal" : "Low";
+        document.getElementById("sulfuric-status").textContent =
+          data["Sulp"] < 3 ? "Normal" : "High";
+        document.getElementById("limestone-status").textContent =
+          data["Lime"] > 4 ? "Sufficient" : "Low";
+        let phval = data["pH "];
+        if (phval > 5 && phval <= 8)
+          document.getElementById("ph-status").textContent = "Safe";
+        else document.getElementById("ph-status").textContent = "Unsafe";
+        document.getElementById("oxygen-status").textContent =
+          data["DO"] > 5 ? "Normal" : "Low";
+      }
+    </script>
+  </body>
+</html>
